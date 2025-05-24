@@ -2,11 +2,11 @@
 
 import React, { useState } from "react"
 import emailjs from "@emailjs/browser"
-import { Button } from "components/ui/button"
-import { Input } from "components/ui/input"
-import { Textarea } from "components/ui/textarea"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import { Github, Linkedin, Mail, Send, CheckCircle, AlertCircle, Loader2 } from "lucide-react"
-import { Alert, AlertDescription } from "components/ui/alert"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 const SERVICE_ID = "service_uypqkai"
 const TEMPLATE_ID = "your_custom_template_id" // Replace with your actual EmailJS template ID
