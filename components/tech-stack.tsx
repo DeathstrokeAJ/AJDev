@@ -7,6 +7,25 @@ import { technologies } from "@/data/technologies"
 
 gsap.registerPlugin(ScrollTrigger)
 
+const techGroups = [
+  {
+    title: "Frontend",
+    items: ["React JS", "Next JS", "TypeScript", "Tailwind CSS"],
+  },
+  {
+    title: "Backend",
+    items: ["Node JS", "Firebase", "MongoDB"],
+  },
+  {
+    title: "DevOps",
+    items: ["Docker", "Git", "Firebase", "Vercel", "GitHub Actions"],
+  },
+  {
+    title: "Others",
+    items: ["SAP Analytics", "RabbitMQ", "Canva", "WordPress"],
+  },
+]
+
 const TechStack = () => {
   useEffect(() => {
     gsap.fromTo(
@@ -37,20 +56,31 @@ const TechStack = () => {
 
   return (
     <section>
-      <div className="tech-icons-wrapper flex flex-row flex-wrap justify-center gap-8 md:gap-10">
-        {technologies.map((technology) => (
-          <div className="tech-icon group relative" key={technology.name}>
-            <div className="w-20 h-20 md:w-28 md:h-28 p-4 rounded-xl bg-card border border-border hover:border-primary/50 transition-all duration-300 hover:scale-110 hover:rotate-6 hover:shadow-lg hover:shadow-primary/20">
-              <img
-                src={technology.icon || "/placeholder.svg"}
-                alt={technology.name}
-                className="w-full h-full object-contain filter group-hover:brightness-110 transition-all duration-300"
-              />
-            </div>
-            <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <span className="text-xs font-medium text-primary bg-card px-2 py-1 rounded border border-border whitespace-nowrap">
-                {technology.name}
-              </span>
+      
+      <div className="flex flex-col gap-10">
+        {techGroups.map((group) => (
+          <div key={group.title}>
+            <h3 className="text-xl font-semibold mb-4 text-primary">{group.title}</h3>
+            <div className="tech-icons-wrapper flex flex-row flex-wrap justify-center gap-6 md:gap-10">
+              {group.items.map((name) => {
+                const tech = technologies.find((t) => t.name.toLowerCase() === name.toLowerCase()) || { name, icon: "/placeholder.svg" }
+                return (
+                  <div className="tech-icon group relative" key={tech.name}>
+                    <div className="w-16 h-16 md:w-20 md:h-20 p-3 rounded-xl bg-card border border-border hover:border-primary/50 transition-all duration-300 hover:scale-110 hover:rotate-6 hover:shadow-lg hover:shadow-primary/20">
+                      <img
+                        src={tech.icon}
+                        alt={tech.name}
+                        className="w-full h-full object-contain filter group-hover:brightness-110 transition-all duration-300"
+                      />
+                    </div>
+                    <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <span className="text-xs font-medium text-primary bg-card px-2 py-1 rounded border border-border whitespace-nowrap">
+                        {tech.name}
+                      </span>
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           </div>
         ))}

@@ -1,305 +1,225 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { gsap } from "gsap"
 import { Button } from "@/components/ui/button"
-import { ArrowDown, Github, Linkedin, Mail, FileText } from "lucide-react"
-import TypewriterComponent from "typewriter-effect"
-import ComputersCanvas from "@/components/computers-canvas"
+import { ArrowDown, Github, Linkedin, Mail, FileText, Code, Palette, Database, Smartphone } from "lucide-react"
 
 const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null)
   const nameRef = useRef<HTMLHeadingElement>(null)
-  const [isMobile, setIsMobile] = useState(false)
+  const [currentRole, setCurrentRole] = useState(0)
+  const [isVisible, setIsVisible] = useState(false)
+
+  const roles = [
+    "Full Stack Developer",
+    "React Specialist", 
+    "UI/UX Designer",
+    "Mobile Developer"
+  ]
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Animate name reveal
-      if (nameRef.current) {
-        gsap.from(nameRef.current, {
-          opacity: 0,
-          y: 50,
-          duration: 1,
-          ease: "back.out(1.7)",
-        })
-      }
+    setIsVisible(true)
+    
+    // Animate role switching
+    const interval = setInterval(() => {
+      setCurrentRole(prev => (prev + 1) % roles.length)
+    }, 3000)
 
-      // Animate hero icons
-      gsap.from(".hero-icon", {
-        opacity: 0,
-        scale: 0,
-        rotation: 180,
-        stagger: 0.1,
-        duration: 1,
-        delay: 0.5,
-        ease: "back.out(1.7)",
-      })
-
-      // Animate social icons
-      gsap.from(".social-icon", {
-        opacity: 0,
-        y: 20,
-        stagger: 0.1,
-        duration: 0.8,
-        delay: 1,
-        ease: "power3.out",
-      })
-
-      // Animate CTA button
-      gsap.from(".cta-button", {
-        opacity: 0,
-        y: 20,
-        duration: 0.8,
-        delay: 1.2,
-        ease: "power3.out",
-      })
-    }, heroRef)
-
-    return () => ctx.revert()
+    return () => clearInterval(interval)
   }, [])
 
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768)
+  const skillIcons = [
+    { 
+      icon: Code, 
+      label: "Development",
+      gradient: "from-blue-500 to-purple-600",
+      description: "Full Stack"
+    },
+    { 
+      icon: Palette, 
+      label: "Design",
+      gradient: "from-purple-500 to-pink-600",
+      description: "UI/UX"
+    },
+    { 
+      icon: Database, 
+      label: "Backend",
+      gradient: "from-green-500 to-teal-600",
+      description: "Scalable"
+    },
+    { 
+      icon: Smartphone, 
+      label: "Mobile",
+      gradient: "from-orange-500 to-red-600",
+      description: "Cross Platform"
     }
+  ]
 
-    checkMobile()
-    window.addEventListener("resize", checkMobile)
-
-    return () => window.removeEventListener("resize", checkMobile)
-  }, [])
+  const socialLinks = [
+    {
+      icon: Github,
+      label: "GitHub",
+      url: "https://github.com/DeathstrokeAJ",
+      username: "DeathstrokeAJ",
+      color: "text-gray-400 hover:text-white"
+    },
+    {
+      icon: Linkedin,
+      label: "LinkedIn",
+      url: "https://linkedin.com/in/adithya-parambil",
+      username: "adithya-parambil",
+      color: "text-blue-400 hover:text-blue-300"
+    },
+    {
+      icon: Mail,
+      label: "Email",
+      url: "mailto:adithyaj2910@gmail.com",
+      username: "adithyaj2910@gmail.com",
+      color: "text-purple-400 hover:text-purple-300"
+    }
+  ]
 
   return (
-    <div ref={heroRef} className="min-h-screen flex items-center justify-center pt-16 pb-8">
-      {isMobile ? (
-        // Mobile layout - stacked vertically
-        <div className="max-w-7xl mx-auto px-4 flex flex-col items-center">
-          {/* Content */}
-          <div className="text-center mb-8">
-            <h1 ref={nameRef} className="text-4xl md:text-6xl font-bold mb-4 gradient-text">
+    <div 
+      ref={heroRef} 
+      className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-background via-background to-primary/5"
+    >
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-purple-500/5 rounded-full blur-3xl animate-pulse delay-500" />
+      </div>
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="text-center space-y-8">
+          {/* Name and Title */}
+          <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <h1 
+              ref={nameRef} 
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 bg-gradient-to-r from-primary via-blue-600 to-purple-600 bg-clip-text text-transparent"
+            >
               Adithya Parambil
             </h1>
-
-            <div className="text-xl md:text-2xl font-medium mb-6 h-12 flex justify-center items-center">
-              <TypewriterComponent
-                options={{
-                  strings: [
-                    "Full Stack Developer",
-                    "Mobile App Developer",
-                    "React / React Native Specialist",
-                    "UI/UX Enthusiast",
-                  ],
-                  autoStart: true,
-                  loop: true,
-                  wrapperClassName: "typing-effect text-primary",
-                  cursorClassName: "text-primary",
-                }}
-              />
+            
+            <div className="text-xl sm:text-2xl md:text-3xl font-medium mb-6 h-12 flex justify-center items-center">
+              <span className="text-muted-foreground">
+                {roles.map((role, index) => (
+                  <span
+                    key={role}
+                    className={`absolute transition-all duration-500 ${
+                      index === currentRole 
+                        ? 'opacity-100 translate-y-0' 
+                        : 'opacity-0 translate-y-2'
+                    }`}
+                  >
+                    {role}
+                  </span>
+                ))}
+              </span>
             </div>
+          </div>
 
-            {/* Colorful Hero Icons */}
-            <div className="flex justify-center space-x-4 mb-6">
-              <div className="hero-icon w-16 h-16 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 p-3 hover:scale-110 transition-transform">
-                <svg viewBox="0 0 24 24" fill="white" className="w-full h-full">
-                  <path d="M12 2L2 7v10c0 5.55 3.84 9.739 9 11 5.16-1.261 9-5.45 9-11V7l-10-5z" />
-                </svg>
+          {/* Skills Icons */}
+          <div className={`flex justify-center items-center gap-4 sm:gap-6 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            {skillIcons.map((skill, index) => (
+              <div
+                key={skill.label}
+                className={`group relative transition-all duration-500 delay-${index * 100}`}
+              >
+                <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br ${skill.gradient} p-4 shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 cursor-pointer`}>
+                  <skill.icon className="w-full h-full text-white" />
+                </div>
+                <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="bg-card border border-border rounded-lg px-3 py-2 shadow-lg">
+                    <p className="text-xs font-medium">{skill.label}</p>
+                    <p className="text-xs text-muted-foreground">{skill.description}</p>
+                  </div>
+                </div>
               </div>
-              <div className="hero-icon w-16 h-16 rounded-full bg-gradient-to-r from-green-500 to-teal-600 p-3 hover:scale-110 transition-transform">
-                <svg viewBox="0 0 24 24" fill="white" className="w-full h-full">
-                  <path d="M17 7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h10c2.76 0 5-2.24 5-5s-2.24-5-5-5zM7 15c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z" />
-                </svg>
-              </div>
-              <div className="hero-icon w-16 h-16 rounded-full bg-gradient-to-r from-orange-500 to-red-600 p-3 hover:scale-110 transition-transform">
-                <svg viewBox="0 0 24 24" fill="white" className="w-full h-full">
-                  <path d="M7 2v11h3v9l7-12h-4l4-8z" />
-                </svg>
-              </div>
-              <div className="hero-icon w-16 h-16 rounded-full bg-gradient-to-r from-pink-500 to-rose-600 p-3 hover:scale-110 transition-transform">
-                <svg viewBox="0 0 24 24" fill="white" className="w-full h-full">
-                  <path d="M17 2H7c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM7 4h10v16H7V4z" />
-                </svg>
-              </div>
-            </div>
+            ))}
+          </div>
 
-            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Crafting beautiful, responsive web applications and mobile experiences with modern technologies. Passionate
-              about creating seamless user interfaces and robust backend solutions.
+          {/* Description */}
+          <div className={`transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <p className="text-lg sm:text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+              Full-stack developer building scalable web applications with{" "}
+              <span className="text-primary font-medium">React, TypeScript, and Firebase</span>. 
+              I've deployed <span className="text-primary font-medium">7+ projects</span> spanning ERP systems, 
+              SaaS dashboards, and IoT backends.
             </p>
-
-            <div className="flex justify-center space-x-4 mb-8">
-              <a href="https://github.com/" target="_blank" rel="noopener noreferrer" className="social-icon">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="rounded-full hover:bg-primary hover:text-primary-foreground transition-colors"
-                >
-                  <Github className="h-5 w-5" />
-                  <span className="sr-only">GitHub</span>
-                </Button>
-              </a>
-              <a href="https://linkedin.com/" target="_blank" rel="noopener noreferrer" className="social-icon">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="rounded-full hover:bg-primary hover:text-primary-foreground transition-colors"
-                >
-                  <Linkedin className="h-5 w-5" />
-                  <span className="sr-only">LinkedIn</span>
-                </Button>
-              </a>
-              <a href="mailto:contact@example.com" className="social-icon">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="rounded-full hover:bg-primary hover:text-primary-foreground transition-colors"
-                >
-                  <Mail className="h-5 w-5" />
-                  <span className="sr-only">Email</span>
-                </Button>
-              </a>
-              <a href="/resume.pdf" download className="social-icon">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="rounded-full hover:bg-primary hover:text-primary-foreground transition-colors"
-                >
-                  <FileText className="h-5 w-5" />
-                  <span className="sr-only">Resume</span>
-                </Button>
-              </a>
+            
+            <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
+              <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl p-4 hover:border-primary/50 transition-colors">
+                <div className="text-2xl font-bold text-primary mb-1">7+</div>
+                <div className="text-sm text-muted-foreground">Deployed Projects</div>
+              </div>
+              <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl p-4 hover:border-primary/50 transition-colors">
+                <div className="text-2xl font-bold text-primary mb-1">IEEE</div>
+                <div className="text-sm text-muted-foreground">Published Author</div>
+              </div>
+              <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl p-4 hover:border-primary/50 transition-colors">
+                <div className="text-2xl font-bold text-primary mb-1">SMB</div>
+                <div className="text-sm text-muted-foreground">Business OS Platform</div>
+              </div>
             </div>
+          </div>
 
-            <a href="#dashboard" className="cta-button inline-block">
+          {/* Social Links */}
+          <div className={`transition-all duration-1000 delay-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6">
+              {socialLinks.map((social, index) => (
+                <a
+                  key={social.label}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-3 px-6 py-3 bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl hover:border-primary/50 transition-all duration-300 hover:scale-105 w-full sm:w-auto"
+                >
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-blue-500/20 flex items-center justify-center group-hover:from-primary/30 group-hover:to-blue-500/30 transition-all duration-300">
+                    <social.icon className={`h-5 w-5 ${social.color} transition-colors`} />
+                  </div>
+                  <div className="text-left">
+                    <div className="text-sm font-medium">{social.label}</div>
+                    <div className="text-xs text-muted-foreground">{social.username}</div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* CTA Buttons */}
+          <div className={`flex flex-col sm:flex-row justify-center items-center gap-4 transition-all duration-1000 delay-900 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <a href="#dashboard" className="inline-block">
               <Button
                 size="lg"
-                className="group bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90"
+                className="group bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 shadow-lg hover:shadow-xl transition-all duration-300 px-8"
               >
                 Explore My Work
                 <ArrowDown className="ml-2 h-4 w-4 group-hover:translate-y-1 transition-transform" />
               </Button>
             </a>
-          </div>
-
-          {/* 3D Canvas - Below content in mobile */}
-          <div className="w-full h-[350px] mt-4">
-            <ComputersCanvas isMobile={isMobile} />
-          </div>
-        </div>
-      ) : (
-        // Desktop layout - side by side
-        <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-          {/* Left side - Content */}
-          <div className="text-center lg:text-left order-2 lg:order-1">
-            <h1 ref={nameRef} className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 gradient-text">
-              Adithya Parambil
-            </h1>
-
-            <div className="text-xl md:text-2xl font-medium mb-6 h-12 flex justify-center lg:justify-start items-center">
-              <TypewriterComponent
-                options={{
-                  strings: [
-                    "Full Stack Developer",
-                    "Mobile App Developer",
-                    "React / React Native Specialist",
-                    "UI/UX Enthusiast",
-                  ],
-                  autoStart: true,
-                  loop: true,
-                  wrapperClassName: "typing-effect text-primary",
-                  cursorClassName: "text-primary",
-                }}
-              />
-            </div>
-
-            {/* Colorful Hero Icons */}
-            <div className="flex justify-center lg:justify-start space-x-4 mb-6">
-              <div className="hero-icon w-16 h-16 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 p-3 hover:scale-110 transition-transform">
-                <svg viewBox="0 0 24 24" fill="white" className="w-full h-full">
-                  <path d="M12 2L2 7v10c0 5.55 3.84 9.739 9 11 5.16-1.261 9-5.45 9-11V7l-10-5z" />
-                </svg>
-              </div>
-              <div className="hero-icon w-16 h-16 rounded-full bg-gradient-to-r from-green-500 to-teal-600 p-3 hover:scale-110 transition-transform">
-                <svg viewBox="0 0 24 24" fill="white" className="w-full h-full">
-                  <path d="M17 7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h10c2.76 0 5-2.24 5-5s-2.24-5-5-5zM7 15c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z" />
-                </svg>
-              </div>
-              <div className="hero-icon w-16 h-16 rounded-full bg-gradient-to-r from-orange-500 to-red-600 p-3 hover:scale-110 transition-transform">
-                <svg viewBox="0 0 24 24" fill="white" className="w-full h-full">
-                  <path d="M7 2v11h3v9l7-12h-4l4-8z" />
-                </svg>
-              </div>
-              <div className="hero-icon w-16 h-16 rounded-full bg-gradient-to-r from-pink-500 to-rose-600 p-3 hover:scale-110 transition-transform">
-                <svg viewBox="0 0 24 24" fill="white" className="w-full h-full">
-                  <path d="M17 2H7c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM7 4h10v16H7V4z" />
-                </svg>
-              </div>
-            </div>
-
-            <p className="text-lg text-muted-foreground mb-8 max-w-2xl">
-              Crafting beautiful, responsive web applications and mobile experiences with modern technologies. Passionate
-              about creating seamless user interfaces and robust backend solutions.
-            </p>
-
-            <div className="flex justify-center lg:justify-start space-x-4 mb-8">
-              <a href="https://github.com/" target="_blank" rel="noopener noreferrer" className="social-icon">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="rounded-full hover:bg-primary hover:text-primary-foreground transition-colors"
-                >
-                  <Github className="h-5 w-5" />
-                  <span className="sr-only">GitHub</span>
-                </Button>
-              </a>
-              <a href="https://linkedin.com/" target="_blank" rel="noopener noreferrer" className="social-icon">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="rounded-full hover:bg-primary hover:text-primary-foreground transition-colors"
-                >
-                  <Linkedin className="h-5 w-5" />
-                  <span className="sr-only">LinkedIn</span>
-                </Button>
-              </a>
-              <a href="mailto:contact@example.com" className="social-icon">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="rounded-full hover:bg-primary hover:text-primary-foreground transition-colors"
-                >
-                  <Mail className="h-5 w-5" />
-                  <span className="sr-only">Email</span>
-                </Button>
-              </a>
-              <a href="/resume.pdf" download className="social-icon">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="rounded-full hover:bg-primary hover:text-primary-foreground transition-colors"
-                >
-                  <FileText className="h-5 w-5" />
-                  <span className="sr-only">Resume</span>
-                </Button>
-              </a>
-            </div>
-
-            <a href="#dashboard" className="cta-button inline-block">
+            
+            <a href="/resume.pdf" download>
               <Button
+                variant="outline"
                 size="lg"
-                className="group bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90"
+                className="group hover:bg-primary hover:text-primary-foreground transition-all duration-300 px-8"
               >
-                Explore My Work
-                <ArrowDown className="ml-2 h-4 w-4 group-hover:translate-y-1 transition-transform" />
+                <FileText className="mr-2 h-4 w-4" />
+                Download Resume
               </Button>
             </a>
           </div>
-
-          {/* Right side - 3D Canvas */}
-          <div className="order-1 lg:order-2 h-[600px]">
-            <ComputersCanvas isMobile={isMobile} />
-          </div>
         </div>
-      )}
+      </div>
+
+      {/* Scroll Indicator */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <div className="w-6 h-10 border-2 border-primary rounded-full flex justify-center">
+          <div className="w-1 h-3 bg-primary rounded-full animate-pulse mt-2" />
+        </div>
+      </div>
     </div>
   )
 }

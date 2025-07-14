@@ -1,81 +1,68 @@
 export const experiences = [
   {
-    role: "Freelance Full Stack Developer",
-    company: "Various Clients",
-    period: "2023 - Present",
-    description:
-      "Developing modern web applications and mobile apps for diverse clients. Specializing in React, Next.js, React Native, and full-stack solutions with a focus on performance and user experience.",
-    skills: ["React", "Next.js", "React Native", "Node.js", "TypeScript", "Firebase", "MongoDB"],
-    achievements: [
-      "Delivered 15+ successful projects with 100% client satisfaction",
-      "Reduced client app loading times by 40% through optimization",
-      "Implemented responsive designs that increased mobile engagement by 60%",
+    role: "Marketing Manager",
+    company: "Cybered",
+    period: "June 2025 - Current",
+    description: [
+      "Executed targeted marketing strategies to boost visibility and user engagement for Dhrona Campus across digital platforms.",
+      "Analyzed competitor trends and campaign data to refine positioning and conversion rates.",
+      "Managed multi-channel content creation (SEO, social, app store), ensuring brand consistency and lead generation.",
+      "Designed and launched the official product website, improving user retention and onboarding flow."
     ],
-    link: "https://github.com/",
+    skills: ["Marketing Strategy", "SEO", "Google Analytics", "UI/UX", "WordPress", "Canva", "Content Management"],
   },
   {
-    role: "Frontend Developer Intern",
+    role: "Backend Developer",
     company: "TechNode",
-    period: "2023",
-    description:
-      "Worked on cutting-edge web applications using React and Next.js. Collaborated with design teams to implement pixel-perfect UIs and integrated RESTful APIs for dynamic content.",
-    skills: ["React", "Next.js", "TypeScript", "Tailwind CSS", "API Integration"],
-    achievements: [
-      "Built 3 major feature components used across multiple projects",
-      "Improved code quality by implementing TypeScript",
-      "Mentored 2 junior developers in React best practices",
+    period: "April 2025 - June 2025",
+    description: [
+      "Built secure REST APIs using Node.js for an MQTT-based IoT notification system (Notify).",
+      "Integrated RabbitMQ for asynchronous task handling, reducing latency by 40%.",
+      "Containerized services using Docker and deployed microservices with high uptime and service isolation."
     ],
+    skills: ["Node.js", "REST API", "RabbitMQ", "Docker", "Microservices", "MQTT", "Postman"],
   },
   {
-    role: "Mobile App Developer",
-    company: "YPP",
-    period: "2023",
-    description:
-      "Developed cross-platform mobile applications using React Native. Implemented secure authentication systems and real-time features for enhanced user engagement.",
-    skills: ["React Native", "Firebase", "Redux", "AsyncStorage", "Push Notifications"],
-    achievements: [
-      "Launched mobile app with 1000+ downloads in first month",
-      "Implemented real-time chat feature with 99.9% uptime",
-      "Reduced app crash rate by 80% through comprehensive testing",
+    role: "Freelance Full Stack Developer",
+    company: "Blue Whale Lagos (Portugal)",
+    period: "April 2025 - April 2025",
+    description: [
+      "Developed a real-time seat reservation system using React, Firebase, Tailwind CSS, and TypeScript.",
+      "Built an admin analytics dashboard with alerts, increasing seat utilization by 30% and reducing wait times by 25%.",
+      "Implemented Firestore-based dynamic data workflows with user authentication and live updates."
     ],
+    skills: ["React", "Firebase", "Tailwind CSS", "TypeScript", "Firestore", "Responsive Design", "Chart.js"],
   },
   {
-    role: "Web3 Developer Intern",
-    company: "Stakesman",
-    period: "2022",
-    description:
-      "Contributed to blockchain and decentralized application development. Learned smart contract development and integrated Web3 technologies into modern web applications.",
-    skills: ["Solidity", "Web3.js", "Ethereum", "React", "MetaMask Integration"],
-    achievements: [
-      "Developed 2 smart contracts deployed on testnet",
-      "Built Web3 wallet integration for DApp",
-      "Contributed to open-source blockchain tools",
+    role: "Freelance Full Stack Developer",
+    company: "Padmavati Travels",
+    period: "May 2025 - May 2025",
+    description: [
+      "Built a modular ERP system to digitize transport operations using React, Firebase, and Tailwind CSS.",
+      "Integrated booking, dispatch, and tracking with real-time database and custom admin workflows.",
+      "Automated PDF invoicing and finance dashboards, reducing manual work by 70% and delays by 50%."
     ],
+    skills: ["React", "TypeScript", "Firebase", "Tailwind CSS", "PDF Generation", "Redux Toolkit", "React Hook Form"],
   },
   {
-    role: "Backend Developer Intern",
-    company: "Trinetra",
-    period: "2022",
-    description:
-      "Focused on server-side development and API creation. Worked with databases, implemented security measures, and optimized application performance.",
-    skills: ["Node.js", "Express", "MongoDB", "JWT", "API Development"],
-    achievements: [
-      "Built RESTful APIs serving 10,000+ requests daily",
-      "Implemented JWT authentication system",
-      "Optimized database queries reducing response time by 50%",
+    role: "Web Developer Intern & Virtual Assistant to the CEO",
+    company: "CyberEd",
+    period: "Jun 2024 - Dec 2024",
+    description: [
+      "Rebuilt front-end components with Next.js to improve SEO, UX, and mobile responsiveness.",
+      "Resolved UI bugs across multiple devices and implemented accessibility enhancements.",
+      "Assisted CEO with investor communications and managed app releases via Google Play Console."
     ],
+    skills: ["Next.js", "JavaScript", "SEO", "Responsive Design", "Play Console", "Bug Fixing", "CMS"],
   },
   {
-    role: "Web Development Intern",
-    company: "Bharat Intern",
-    period: "2022",
-    description:
-      "Started my journey in web development, learning fundamental technologies and building responsive websites. Gained experience in both frontend and backend development.",
-    skills: ["HTML", "CSS", "JavaScript", "Bootstrap", "PHP", "MySQL"],
-    achievements: [
-      "Built 5 responsive websites from scratch",
-      "Learned version control with Git and GitHub",
-      "Completed comprehensive web development training program",
+    role: "WordPress & Shopify Developer",
+    company: "Trinetra Media",
+    period: "Jun 2024 - Nov 2024",
+    description: [
+      "Delivered 20+ responsive WordPress and Shopify websites across fashion, food, and travel domains.",
+      "Customized PHP-based themes and improved SEO structures, increasing organic traffic by 40%."
     ],
+    skills: ["WordPress", "Shopify", "PHP", "SEO", "Responsive Web Design", "Theme Customization"],
   },
-]
+];

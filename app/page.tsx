@@ -11,6 +11,7 @@ import TechStack from "@/components/tech-stack"
 import Education from "@/components/education"
 import Contact from "@/components/contact"
 import EasterEgg from "@/components/easter-egg"
+import DevOpsSection from "@/components/devops-section"
 
 export default function Home() {
   const mainRef = useRef<HTMLDivElement>(null)
@@ -49,17 +50,19 @@ export default function Home() {
       <Hero />
 
       <section id="dashboard" className="section py-16">
-        <h2 className="text-3xl font-bold mb-8 text-center gradient-text">Interactive Dashboard</h2>
+        <h2 className="text-3xl font-bold mb-8 text-center gradient-text">CORE SERVICES</h2>
         <BentoGrid />
       </section>
 
       <section id="projects" className="section py-16">
-        <h2 className="text-3xl font-bold mb-8 text-center gradient-text">Project Showcase</h2>
+        <h2 className="text-3xl font-bold mb-8 text-center gradient-text">PROJECTS</h2>
         <ProjectShowcase />
       </section>
 
+      <DevOpsSection />
+
       <section id="tech" className="section py-16">
-        <h2 className="text-3xl font-bold mb-8 text-center gradient-text">Technologies & Tools</h2>
+        <h2 className="text-3xl font-bold mb-8 text-center gradient-text">🛠 Tech Stack</h2>
         <TechStack />
       </section>
 
