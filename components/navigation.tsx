@@ -86,15 +86,15 @@ const Navigation = () => {
 
   return (
     <>
-      <header
+    <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled 
             ? "bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl shadow-lg border-b border-gray-200/50 dark:border-gray-700/50" 
             : "bg-transparent"
         }`}
-      >
+    >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <button
               onClick={() => window.location.href = "/"}
@@ -111,20 +111,20 @@ const Navigation = () => {
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-1">
-              {navLinks.map((link) => (
+            {navLinks.map((link) => (
                 <a
-                  key={link.name}
-                  href={link.href}
+                key={link.name}
+                href={link.href}
                   className={`relative px-4 py-2 text-sm font-medium transition-all duration-200 rounded-lg group ${
                     activeSection === link.id
                       ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20"
                       : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800/50"
                   }`}
-                >
-                  {link.name}
+              >
+                {link.name}
                 </a>
-              ))}
-            </nav>
+            ))}
+          </nav>
 
             {/* Desktop Actions */}
             <div className="hidden lg:flex items-center space-x-3">
@@ -242,7 +242,7 @@ const Navigation = () => {
                     </a>
                   ))}
                 </div>
-              </nav>
+                </nav>
 
               {/* Mobile Resume Actions */}
               <div className="p-6 border-t border-gray-200 dark:border-gray-700 space-y-3">
