@@ -1,224 +1,277 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { ArrowDown, Github, Linkedin, Mail, FileText, Code, Palette, Database, Smartphone } from "lucide-react"
-
+import { 
+  ArrowDown, Github, Linkedin, Mail, FileText, 
+  Code, Palette, Database, Smartphone 
+} from "lucide-react"
+import { technologies } from "@/data/technologies"
 const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null)
   const nameRef = useRef<HTMLHeadingElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
   const [currentRole, setCurrentRole] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+  const particlesRef = useRef<any[]>([])
+  const animationRef = useRef<number>()
 
   const roles = [
     "Full Stack Developer",
-    "React Specialist", 
-    "UI/UX Designer",
+    "SaaS Builder",
+    "NPM Package Builder",
+    "Content Creator",
     "Mobile Developer"
   ]
 
+  /** ------------------ PARTICLE SYSTEM ------------------ */
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
+    resizeCanvas()
+    window.addEventListener("resize", resizeCanvas)
+
+    const initParticles = () => {
+      particlesRef.current = []
+      const particleCount = Math.min(120, Math.floor(window.innerWidth / 12))
+      for (let i = 0; i < particleCount; i++) {
+        particlesRef.current.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
+          size: Math.random() * 2 + 1,
+          opacity: Math.random() * 0.4 + 0.1,
+          hue: Math.random() * 60 + 200,
+          life: Math.random() * 100,
+          maxLife: Math.random() * 120 + 60
+        })
+      }
+    }
+    initParticles()
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+      particlesRef.current.forEach(p => {
+        const dx = mousePos.x - p.x
+        const dy = mousePos.y - p.y
+        const dist = Math.sqrt(dx * dx + dy * dy)
+
+        if (dist < 100) {
+          const force = (100 - dist) / 100
+          p.vx += dx * force * 0.0006
+          p.vy += dy * force * 0.0006
+        }
+
+        p.x += p.vx
+        p.y += p.vy
+        p.life++
+
+        if (p.x < 0) p.x = canvas.width
+        if (p.x > canvas.width) p.x = 0
+        if (p.y < 0) p.y = canvas.height
+        if (p.y > canvas.height) p.y = 0
+
+        if (p.life > p.maxLife) {
+          p.x = Math.random() * canvas.width
+          p.y = Math.random() * canvas.height
+          p.life = 0
+          p.opacity = Math.random() * 0.4 + 0.1
+        }
+
+        const gradient = ctx.createRadialGradient(
+          p.x, p.y, 0,
+          p.x, p.y, p.size * 2
+        )
+        gradient.addColorStop(0, `hsla(${p.hue}, 80%, 65%, ${p.opacity})`)
+        gradient.addColorStop(1, `hsla(${p.hue}, 80%, 55%, 0)`)
+
+        ctx.fillStyle = gradient
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.size * 2, 0, Math.PI * 2)
+        ctx.fill()
+      })
+
+      animationRef.current = requestAnimationFrame(animate)
+    }
+    animate()
+
+    return () => {
+      window.removeEventListener("resize", resizeCanvas)
+      cancelAnimationFrame(animationRef.current!)
+    }
+  }, [mousePos])
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY })
+    }
+    window.addEventListener("mousemove", handleMouseMove)
+    return () => window.removeEventListener("mousemove", handleMouseMove)
+  }, [])
+
   useEffect(() => {
     setIsVisible(true)
-    
-    // Animate role switching
     const interval = setInterval(() => {
       setCurrentRole(prev => (prev + 1) % roles.length)
-    }, 3000)
-
+    }, 4000)
     return () => clearInterval(interval)
   }, [])
 
-  const skillIcons = [
-    { 
-      icon: Code, 
-      label: "Development",
-      gradient: "from-blue-500 to-purple-600",
-      description: "Full Stack"
-    },
-    { 
-      icon: Palette, 
-      label: "Design",
-      gradient: "from-purple-500 to-pink-600",
-      description: "UI/UX"
-    },
-    { 
-      icon: Database, 
-      label: "Backend",
-      gradient: "from-green-500 to-teal-600",
-      description: "Scalable"
-    },
-    { 
-      icon: Smartphone, 
-      label: "Mobile",
-      gradient: "from-orange-500 to-red-600",
-      description: "Cross Platform"
-    }
-  ]
+  /** ------------------ SKILLS & LINKS ------------------ */
+ const skillIcons = [
+  { 
+    icon: "/assets/tech/reactjs.png", 
+    label: "React JS", 
+    gradient: "from-blue-500 via-cyan-400 to-teal-500" 
+  },
+  { 
+    icon: "/assets/tech/nextjs.png", 
+    label: "Next.js", 
+    gradient: "from-gray-800 via-gray-600 to-black" 
+  },
+  { 
+    icon: "/assets/tech/firebase.png", 
+    label: "Firebase", 
+    gradient: "from-yellow-400 via-amber-500 to-orange-600" 
+  },
+  { 
+    icon: "/assets/tech/wordpress.webp", 
+    label: "WordPress", 
+    gradient: "from-blue-600 via-indigo-500 to-purple-600" 
+  },
+  { 
+    icon: "/assets/tech/mongodb.png", 
+    label: "MongoDB", 
+    gradient: "from-green-500 via-emerald-500 to-teal-600" 
+  },
+]
+
 
   const socialLinks = [
-    {
-      icon: Github,
-      label: "GitHub",
-      url: "https://github.com/DeathstrokeAJ",
-      username: "DeathstrokeAJ",
-      color: "text-gray-400 hover:text-white"
-    },
-    {
-      icon: Linkedin,
-      label: "LinkedIn",
-      url: "https://linkedin.com/in/adithya-parambil",
-      username: "adithya-parambil",
-      color: "text-blue-400 hover:text-blue-300"
-    },
-    {
-      icon: Mail,
-      label: "Email",
-      url: "mailto:adithyaj2910@gmail.com",
-      username: "adithyaj2910@gmail.com",
-      color: "text-purple-400 hover:text-purple-300"
-    }
+    { icon: Github, label: "GitHub", url: "https://github.com/DeathstrokeAJ", username: "DeathstrokeAJ" },
+    { icon: Linkedin, label: "LinkedIn", url: "https://linkedin.com/in/adithya-parambil", username: "adithya-parambil" },
+    { icon: Mail, label: "Email", url: "mailto:adithyaj2910@gmail.com", username: "adithyaj2910@gmail.com" }
   ]
 
+  /** ------------------ UI ------------------ */
   return (
-    <div 
-      ref={heroRef} 
-      className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-background via-background to-primary/5"
+    <div
+      ref={heroRef}
+      className="min-h-screen w-full flex items-center justify-center relative overflow-hidden 
+                 bg-white from-slate-950 via-gray-900 to-slate-800"
     >
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-purple-500/5 rounded-full blur-3xl animate-pulse delay-500" />
-      </div>
+      {/* Particle Layer */}
+      <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-10 w-full h-full" style={{ mixBlendMode: "screen" }} />
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center space-y-8">
-          {/* Name and Title */}
-          <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <h1 
-              ref={nameRef} 
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 bg-gradient-to-r from-primary via-blue-600 to-purple-600 bg-clip-text text-transparent"
-            >
-              Adithya Parambil
-            </h1>
-            
-            <div className="text-xl sm:text-2xl md:text-3xl font-medium mb-6 h-12 flex justify-center items-center">
-              <span className="text-muted-foreground">
-                {roles.map((role, index) => (
-                  <span
-                    key={role}
-                    className={`absolute transition-all duration-500 ${
-                      index === currentRole 
-                        ? 'opacity-100 translate-y-0' 
-                        : 'opacity-0 translate-y-2'
-                    }`}
-                  >
-                    {role}
-                  </span>
-                ))}
-              </span>
-            </div>
-          </div>
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          transition={{ duration: 1.2, ease: "easeOut" }}
+          className="text-center space-y-8"
+        >
+          {/* Name */}
+         {/* Name */}
+<h1 
+  ref={nameRef}
+  className="text-[clamp(2.5rem,6vw,5rem)] tracking-tight 
+             font-[SuperchargeLaser] 
+             bg-gradient-to-r from-purple-400 via-purple-500 to-purple-700
+             bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+>
+  Adithya Parambil
+</h1>
 
-          {/* Skills Icons */}
-          <div className={`flex justify-center items-center gap-4 sm:gap-6 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            {skillIcons.map((skill, index) => (
-              <div
-                key={skill.label}
-                className={`group relative transition-all duration-500 delay-${index * 100}`}
-              >
-                <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br ${skill.gradient} p-4 shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 cursor-pointer`}>
-                  <skill.icon className="w-full h-full text-white" />
-                </div>
-                <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="bg-card border border-border rounded-lg px-3 py-2 shadow-lg">
-                    <p className="text-xs font-medium">{skill.label}</p>
-                    <p className="text-xs text-muted-foreground">{skill.description}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+{/* Role Rotator */}
+<div className="relative h-12 overflow-hidden">
+  {roles.map((role, index) => (
+    <motion.div
+      key={role}
+      initial={{ opacity: 0, y: 20 }}
+      animate={index === currentRole ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
+      transition={{ duration: 0.6 }}
+      className="absolute inset-0 text-lg sm:text-2xl md:text-3xl 
+                 font-[Supercharge3D] tracking-wide
+                 bg-gradient-to-r from-purple-600 via-indigo-500 to-blue-600 
+                 bg-clip-text text-transparent"
+    >
+      {role}
+    </motion.div>
+  ))}
+</div>
+
+
+          {/* Skill Cards */}
+          {/* Skill Cards */}
+<div className="flex flex-wrap justify-center gap-6 mt-8">
+  {skillIcons.map((s, i) => (
+    <motion.div
+      key={s.label}
+      whileHover={{ scale: 1.15, rotate: 6 }}
+      transition={{ type: "spring", stiffness: 200, damping: 10 }}
+      className={`w-20 h-20 sm:w-24 sm:h-24 rounded-2xl  
+                 flex items-center justify-center shadow-xl cursor-pointer backdrop-blur-sm`}
+    >
+      <img src={s.icon} alt={s.label} className="w-15 h-15" />
+    </motion.div>
+  ))}
+</div>
 
           {/* Description */}
-          <div className={`transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <p className="text-lg sm:text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-              Full-stack developer building scalable web applications with{" "}
-              <span className="text-primary font-medium">React, TypeScript, and Firebase</span>. 
-              I've deployed <span className="text-primary font-medium">7+ projects</span> spanning ERP systems, 
-              SaaS dashboards, and IoT backends.
-            </p>
-            
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
-              <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl p-4 hover:border-primary/50 transition-colors">
-                <div className="text-2xl font-bold text-primary mb-1">7+</div>
-                <div className="text-sm text-muted-foreground">Deployed Projects</div>
-              </div>
-              <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl p-4 hover:border-primary/50 transition-colors">
-                <div className="text-2xl font-bold text-primary mb-1">IEEE</div>
-                <div className="text-sm text-muted-foreground">Published Author</div>
-              </div>
-              <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl p-4 hover:border-primary/50 transition-colors">
-                <div className="text-2xl font-bold text-primary mb-1">SMB</div>
-                <div className="text-sm text-muted-foreground">Business OS Platform</div>
-              </div>
-            </div>
-          </div>
+         <p className="max-w-3xl mx-auto text-gray-800 text-base sm:text-lg md:text-xl leading-relaxed mt-6">
+  Full-stack developer building <span className="text-indigo-600 font-semibold">scalable apps</span>  
+  with <span className="text-purple-600 font-semibold">React, Next.js, Firebase, and MongoDB</span>.  
+  Passionate about <span className="text-indigo-700 font-semibold">AI, cybersecurity, and ed-tech innovation</span>.
+</p>
 
           {/* Social Links */}
-          <div className={`transition-all duration-1000 delay-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6">
-              {socialLinks.map((social, index) => (
-                <a
-                  key={social.label}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center gap-3 px-6 py-3 bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl hover:border-primary/50 transition-all duration-300 hover:scale-105 w-full sm:w-auto"
-                >
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-blue-500/20 flex items-center justify-center group-hover:from-primary/30 group-hover:to-blue-500/30 transition-all duration-300">
-                    <social.icon className={`h-5 w-5 ${social.color} transition-colors`} />
-                  </div>
-                  <div className="text-left">
-                    <div className="text-sm font-medium">{social.label}</div>
-                    <div className="text-xs text-muted-foreground">{social.username}</div>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
+          <div className="flex justify-center gap-6 mt-8">
+  {socialLinks.map((s, i) => (
+    <motion.a
+      key={s.label}
+      href={s.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      whileHover={{ scale: 1.05 }}
+      className="flex items-center gap-3 px-5 py-3 rounded-2xl 
+                 bg-gradient-to-r from-white via-purple-900 to-purple-700
+                 border border-purple-800/40 backdrop-blur-md 
+                 hover:from-purple-800 hover:via-black hover:to-purple-600 
+                 transition-all"
+    >
+      <s.icon className="w-6 h-6 text-purple-300" />
+      <span className="text-purple-200">{s.label}</span>
+    </motion.a>
+  ))}
+</div>
+
 
           {/* CTA Buttons */}
-          <div className={`flex flex-col sm:flex-row justify-center items-center gap-4 transition-all duration-1000 delay-900 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <a href="#dashboard" className="inline-block">
-              <Button
-                size="lg"
-                className="group bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 shadow-lg hover:shadow-xl transition-all duration-300 px-8"
-              >
-                Explore My Work
-                <ArrowDown className="ml-2 h-4 w-4 group-hover:translate-y-1 transition-transform" />
-              </Button>
-            </a>
-            
-            <a href="/resume.pdf" download>
-              <Button
-                variant="outline"
-                size="lg"
-                className="group hover:bg-primary hover:text-primary-foreground transition-all duration-300 px-8"
-              >
-                <FileText className="mr-2 h-4 w-4" />
-                Download Resume
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mt-10">
+            <Button size="lg" className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg hover:scale-105 transition">
+              Explore My Work <ArrowDown className="ml-2 w-5 h-5" />
+            </Button>
+            <a href="/assets/Resume.pdf" download>
+              <Button size="lg" variant="outline" className="border-gray-400 text-white bg-black hover:bg-white/10 hover:scale-105 transition">
+                <FileText className="mr-2 w-5 h-5" /> Download Resume
               </Button>
             </a>
           </div>
-        </div>
-      </div>
 
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 border-2 border-primary rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-primary rounded-full animate-pulse mt-2" />
-        </div>
+          {/* Scroll Indicator */}
+         
+        </motion.div>
       </div>
     </div>
   )

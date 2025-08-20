@@ -78,7 +78,7 @@ const ProjectShowcase = () => {
 
         {/* Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {projects.slice(0, 5).map((project, index) => (
+          {projects.slice(0, 6).map((project, index) => (
             <div
               key={project.title}
               className={`group relative overflow-hidden rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10 hover:border-primary/30 cursor-pointer hover:-translate-y-1 ${

@@ -4,13 +4,13 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth"
 import { getFirestore } from "firebase/firestore"
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCCpMQclWkViwHbRV5c06PNnRPOMybg3PQ",
-  authDomain: "tidal-cipher-414619.firebaseapp.com",
-  projectId: "tidal-cipher-414619",
-  storageBucket: "tidal-cipher-414619.appspot.com",
-  messagingSenderId: "577034020305",
-  appId: "1:577034020305:web:5218adbe7086f5a92d6cf0",
-  measurementId: "G-8GC5QP40PM"
+  apiKey: "AIzaSyCdqajo3cUTv5rq9p8M6sWv2SGZqJvvEo8",
+  authDomain: "freelancer-student.firebaseapp.com",
+  projectId: "freelancer-student",
+  storageBucket: "freelancer-student.firebasestorage.app",
+  messagingSenderId: "242073459318",
+  appId: "1:242073459318:web:ac9213feb6036b7b065d57",
+  measurementId: "G-10MT8JGJGW"
 }
 
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp()

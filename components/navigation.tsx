@@ -1,27 +1,14 @@
 "use client"
 import { useState, useEffect } from "react"
 import { Menu, Sun, Moon, Terminal, Download, ExternalLink, X } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
-// Mock components for demonstration
-const Button = ({ children, variant = "default", size = "default", className = "", onClick, ...props }) => (
-  <button
-    className={`inline-flex items-center justify-center rounded-md font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ${
-      variant === "ghost" ? "hover:bg-accent hover:text-accent-foreground" :
-      variant === "outline" ? "border border-input bg-background hover:bg-accent hover:text-accent-foreground" :
-      "bg-primary text-primary-foreground hover:bg-primary/90"
-    } ${
-      size === "icon" ? "h-9 w-9" :
-      size === "sm" ? "h-8 px-3 text-sm" :
-      "h-10 px-4 py-2"
-    } ${className}`}
-    onClick={onClick}
-    {...props}
-  >
-    {children}
-  </button>
-)
+interface NavigationProps {
+  onNavigate?: (page: string) => void;
+  currentPage?: string;
+}
 
-const Navigation = () => {
+const Navigation = ({ onNavigate, currentPage = "home" }: NavigationProps) => {
   const [mounted, setMounted] = useState(false)
   const [theme, setTheme] = useState("light")
   const [scrolled, setScrolled] = useState(false)
@@ -35,26 +22,36 @@ const Navigation = () => {
       setScrolled(window.scrollY > 20)
       
       // Update active section based on scroll position
-      const sections = ["home", "projects", "resume", "skills", "education", "contact"]
-      const scrollPosition = window.scrollY + 100
-      
-      for (const section of sections) {
-        const element = document.getElementById(section === "home" ? "" : section)
-        if (element) {
-          const offsetTop = element.offsetTop
-          const offsetBottom = offsetTop + element.offsetHeight
-          
-          if (scrollPosition >= offsetTop && scrollPosition < offsetBottom) {
-            setActiveSection(section)
-            break
+      if (currentPage === "home") {
+        const sections = ["home", "projects", "resume", "skills", "education", "contact"]
+        const scrollPosition = window.scrollY + 100
+        
+        for (const section of sections) {
+          const element = document.getElementById(section === "home" ? "" : section)
+          if (element) {
+            const offsetTop = element.offsetTop
+            const offsetBottom = offsetTop + element.offsetHeight
+            
+            if (scrollPosition >= offsetTop && scrollPosition < offsetBottom) {
+              setActiveSection(section)
+              break
+            }
           }
         }
+      } else {
+        setActiveSection(currentPage)
       }
     }
 
     window.addEventListener("scroll", handleScroll)
+    
+    // Set initial active section
+    if (currentPage !== "home") {
+      setActiveSection(currentPage)
+    }
+    
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+  }, [currentPage])
 
   const navLinks = [
     { name: "Home", href: "/", id: "home" },
@@ -66,38 +63,55 @@ const Navigation = () => {
     { name: "Nerd Notes", href: "/nerd-notes", id: "nerd-notes" },
   ]
 
-  const handleNavClick = (href) => {
-    if (href === "#") {
+  const handleNavClick = (href: string, id: string) => {
+    if (id === "nerd-notes") {
+      onNavigate?.("nerd-notes")
+    } else if (id === "home") {
+      onNavigate?.("home")
       window.scrollTo({ top: 0, behavior: "smooth" })
-    } else {
-      const element = document.querySelector(href)
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth", block: "start" })
+    } else if (href.startsWith("/#")) {
+      // Navigate to home first if not already there, then scroll to section
+      if (currentPage !== "home") {
+        onNavigate?.("home")
+        // Wait for page to change before scrolling
+        setTimeout(() => {
+          const element = document.querySelector(href.substring(1))
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth", block: "start" })
+          }
+        }, 100)
+      } else {
+        const element = document.querySelector(href.substring(1))
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" })
+        }
       }
     }
     setMobileMenuOpen(false)
   }
 
   const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark")
+    const newTheme = theme === "dark" ? "light" : "dark"
+    setTheme(newTheme)
+    document.documentElement.classList.toggle("dark", newTheme === "dark")
   }
 
   if (!mounted) return null
 
   return (
     <>
-    <header
+      <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled 
             ? "bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl shadow-lg border-b border-gray-200/50 dark:border-gray-700/50" 
             : "bg-transparent"
         }`}
-    >
+      >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <button
-              onClick={() => window.location.href = "/"}
+              onClick={() => handleNavClick("/", "home")}
               className="flex items-center space-x-2 group transition-all duration-200 hover:scale-105"
             >
               <div className="relative">
@@ -111,25 +125,25 @@ const Navigation = () => {
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-1">
-            {navLinks.map((link) => (
-                <a
-                key={link.name}
-                href={link.href}
+              {navLinks.map((link) => (
+                <button
+                  key={link.name}
+                  onClick={() => handleNavClick(link.href, link.id)}
                   className={`relative px-4 py-2 text-sm font-medium transition-all duration-200 rounded-lg group ${
                     activeSection === link.id
                       ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20"
                       : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800/50"
                   }`}
-              >
-                {link.name}
-                </a>
-            ))}
-          </nav>
+                >
+                  {link.name}
+                </button>
+              ))}
+            </nav>
 
             {/* Desktop Actions */}
             <div className="hidden lg:flex items-center space-x-3">
               <a
-                href="https://drive.google.com/file/d/YOUR_RESUME_ID/preview"
+                href="/assets/Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center space-x-2 px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 group"
@@ -139,7 +153,7 @@ const Navigation = () => {
               </a>
               
               <a
-                href="https://drive.google.com/uc?export=download&id=YOUR_RESUME_ID"
+                href="/assets/Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center space-x-2 px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
@@ -228,26 +242,25 @@ const Navigation = () => {
               <nav className="flex-1 px-6 py-4">
                 <div className="space-y-1">
                   {navLinks.map((link) => (
-                    <a
+                    <button
                       key={link.name}
-                      href={link.href}
+                      onClick={() => handleNavClick(link.href, link.id)}
                       className={`w-full text-left px-4 py-3 text-lg font-medium transition-all duration-200 rounded-lg ${
                         activeSection === link.id
                           ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20"
                           : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800/50"
                       }`}
-                      onClick={() => setMobileMenuOpen(false)}
                     >
                       {link.name}
-                    </a>
+                    </button>
                   ))}
                 </div>
-                </nav>
+              </nav>
 
               {/* Mobile Resume Actions */}
               <div className="p-6 border-t border-gray-200 dark:border-gray-700 space-y-3">
                 <a
-                  href="https://drive.google.com/file/d/YOUR_RESUME_ID/preview"
+                  href="/assets/Resume.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center space-x-2 w-full px-4 py-3 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200"
@@ -258,7 +271,7 @@ const Navigation = () => {
                 </a>
                 
                 <a
-                  href="https://drive.google.com/uc?export=download&id=YOUR_RESUME_ID"
+                  href="/assets/Resume.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center space-x-2 w-full px-4 py-3 text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium shadow-lg"

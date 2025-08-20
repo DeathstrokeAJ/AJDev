@@ -83,6 +83,19 @@ body {
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
+@font-face {
+  font-family: 'SuperchargeLaser';
+  src: url('./public/assets/superchargestraightlaser.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Supercharge3D';
+  src: url('./public/assets/superchargestraight3d.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 
 @layer base {
   * {

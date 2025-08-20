@@ -12,11 +12,30 @@ const ResumeTimeline = () => {
   const timelineRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger)
+  gsap.registerPlugin(ScrollTrigger)
 
-    const ctx = gsap.context(() => {
-      // Animate timeline cards
-      gsap.utils.toArray<HTMLElement>(".timeline-card").forEach((card, i) => {
+  const ctx = gsap.context(() => {
+    const isMobile = window.innerWidth < 768 // Tailwind's md breakpoint
+
+    gsap.utils.toArray<HTMLElement>(".timeline-card").forEach((card, i) => {
+      if (isMobile) {
+        // Animate on load (no scroll)
+        gsap.fromTo(
+          card,
+          {
+            opacity: 0,
+            y: 50,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            delay: i * 0.15, // small stagger for nicer effect
+          }
+        )
+      } else {
+        // Animate with scrollTrigger
         gsap.fromTo(
           card,
           {
@@ -36,18 +55,20 @@ const ResumeTimeline = () => {
               end: "bottom 20%",
               toggleActions: "play none none reverse",
             },
-          },
+          }
         )
-      })
-    }, timelineRef)
+      }
+    })
+  }, timelineRef)
 
-    return () => ctx.revert()
-  }, [])
+  return () => ctx.revert()
+}, [])
+
 
   return (
     <div ref={timelineRef} className="relative">
       <div className="flex justify-center mb-12">
-        <a href="/resume.pdf" download>
+        <a href="/assets/Resume.pdf" download>
           <Button
             size="lg"
             className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"

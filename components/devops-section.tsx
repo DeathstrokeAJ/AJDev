@@ -220,49 +220,49 @@ export default function DevOpsSection() {
         </div>
 
         {/* Workflow Visualization */}
-        <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-6 md:p-8">
-          <div className="text-center mb-8">
-            <h3 className="text-xl font-semibold mb-2 flex items-center justify-center gap-2">
-              <Zap className="h-5 w-5 text-primary" />
-              Deployment Workflow
-            </h3>
-            <p className="text-muted-foreground">From code to production in minutes</p>
-          </div>
+        {/* Workflow Visualization */}
+<div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-6 md:p-8">
+  <div className="text-center mb-8">
+    <h3 className="text-xl font-semibold mb-2 flex items-center justify-center gap-2">
+      <Zap className="h-5 w-5 text-primary" />
+      Deployment Workflow
+    </h3>
+    <p className="text-muted-foreground">From code to production in minutes</p>
+  </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-2">
-            {[
-              { icon: Code2, title: 'Code Push', desc: 'Developer commits' },
-              { icon: GitBranch, title: 'CI/CD', desc: 'Automated testing' },
-              { icon: Server, title: 'Build', desc: 'Docker containers' },
-              { icon: Shield, title: 'Security', desc: 'Vulnerability scan' },
-              { icon: Cloud, title: 'Deploy', desc: 'Live production' }
-            ].map((step, index) => (
-              <div key={step.title} className="flex flex-col items-center text-center">
-                <div className="relative">
-                  <div className="w-16 h-16 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full flex items-center justify-center border border-primary/30 mb-3">
-                    <step.icon className="h-6 w-6 text-primary" />
-                  </div>
-                  {index < 4 && (
-                    <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-gradient-to-r from-primary/30 to-primary/10" />
-                  )}
-                </div>
-                <h4 className="font-medium text-sm mb-1">{step.title}</h4>
-                <p className="text-xs text-muted-foreground">{step.desc}</p>
-              </div>
-            ))}
+  {/* Custom 3-column layout */}
+  <div className="grid grid-cols-3 gap-6 md:grid-cols-5 md:gap-2">
+    {[
+      { icon: Code2, title: 'Code Push', desc: 'Developer commits' },
+      { icon: GitBranch, title: 'CI/CD', desc: 'Automated testing' },
+      { icon: Server, title: 'Build', desc: 'Docker containers' },
+      { icon: Shield, title: 'Security', desc: 'Vulnerability scan' },
+      { icon: Cloud, title: 'Deploy', desc: 'Live production' }
+    ].map((step, index) => (
+      <div
+        key={step.title}
+        className={`
+          flex flex-col items-center text-center
+          ${index === 3 ? 'col-start-1' : ''}
+          ${index === 4 ? 'col-start-3' : ''}
+        `}
+      >
+        <div className="relative">
+          <div className="w-16 h-16 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full flex items-center justify-center border border-primary/30 mb-3">
+            <step.icon className="h-6 w-6 text-primary" />
           </div>
+          {/* Horizontal connectors for md+ */}
+          {index < 4 && (
+            <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-gradient-to-r from-primary/30 to-primary/10" />
+          )}
         </div>
+        <h4 className="font-medium text-sm mb-1">{step.title}</h4>
+        <p className="text-xs text-muted-foreground">{step.desc}</p>
+      </div>
+    ))}
+  </div>
+</div>
 
-        {/* Call to Action */}
-        <div className="text-center mt-12">
-          <Button 
-            size="lg" 
-            className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 transition-all duration-300 shadow-lg hover:shadow-xl"
-          >
-            <Rocket className="h-5 w-5 mr-2" />
-            View Infrastructure Details
-          </Button>
-        </div>
       </div>
     </section>
   )
